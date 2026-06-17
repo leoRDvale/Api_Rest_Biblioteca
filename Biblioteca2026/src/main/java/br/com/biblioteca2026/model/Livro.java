@@ -28,9 +28,6 @@ public class Livro implements Serializable {
     @Column(name = "disponivel", nullable = false)
     private Boolean disponivel = true;
 
-    // Regra 2: livro tem status de disponibilidade
-    // disponivel = true  → pode ser emprestado
-    // disponivel = false → já está em empréstimo ativo
 
     @ManyToOne
     @JoinColumn(name = "autor_id", nullable = false)
