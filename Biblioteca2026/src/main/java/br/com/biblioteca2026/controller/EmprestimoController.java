@@ -42,15 +42,7 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimoService.buscarAtivosDoUsuario(usuarioId));
     }
 
-    /**
-     * Realiza um novo empréstimo.
-     * Body esperado:
-     * {
-     *   "usuarioId": 1,
-     *   "livroId": 2,
-     *   "dataPrevistaDevolucao": "2026-07-15"
-     * }
-     */
+   
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestBody Map<String, String> body) {
         Long usuarioId = Long.parseLong(body.get("usuarioId"));
@@ -61,10 +53,7 @@ public class EmprestimoController {
         return ResponseEntity.status(201).body(emprestimo);
     }
 
-    /**
-     * Realiza a devolução de um empréstimo ativo.
-     * PATCH /emprestimos/{id}/devolver
-     */
+    
     @PatchMapping(value = "/{id}/devolver", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Emprestimo> realizarDevolucao(@PathVariable Long id) {
         return ResponseEntity.ok(emprestimoService.realizarDevolucao(id));
