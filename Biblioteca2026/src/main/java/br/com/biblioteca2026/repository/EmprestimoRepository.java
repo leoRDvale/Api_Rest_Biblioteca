@@ -11,15 +11,11 @@ import java.util.List;
 @Repository
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
 
-    // Regra 1: conta empréstimos ativos do usuário
     long countByUsuarioAndStatus(Usuario usuario, Emprestimo.Status status);
 
-    // Regra 2: verifica se o livro já tem empréstimo ativo
     boolean existsByLivroAndStatus(Livro livro, Emprestimo.Status status);
 
-    // Busca empréstimos por usuário
     List<Emprestimo> findByUsuario(Usuario usuario);
 
-    // Busca empréstimos ativos por usuário
     List<Emprestimo> findByUsuarioAndStatus(Usuario usuario, Emprestimo.Status status);
 }
