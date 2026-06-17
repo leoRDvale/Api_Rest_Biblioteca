@@ -57,7 +57,6 @@ public class EmprestimoService {
         Usuario usuario = buscarUsuario(usuarioId);
         Livro livro = buscarLivro(livroId);
 
-        // ── Regra 1: limite de 3 empréstimos ativos por usuário ──────────────
         long emprestimosAtivos = emprestimoRepository
                 .countByUsuarioAndStatus(usuario, Emprestimo.Status.ATIVO);
 
@@ -67,7 +66,6 @@ public class EmprestimoService {
                     " empréstimos ativos. Devolva um livro antes de realizar um novo empréstimo.");
         }
 
-        // ── Regra 2: livro deve estar disponível ──────────────────────────────
         if (!livro.getDisponivel()) {
             throw new RequisicaoInvalidaException(
                     "O livro '" + livro.getTitulo() + "' não está disponível para empréstimo.");
@@ -78,11 +76,9 @@ public class EmprestimoService {
                     "A data prevista de devolução deve ser uma data futura.");
         }
 
-        // Marca o livro como indisponível
         livro.setDisponivel(false);
         livroRepository.save(livro);
 
-        // Cria o empréstimo
         Emprestimo emprestimo = new Emprestimo();
         emprestimo.setUsuario(usuario);
         emprestimo.setLivro(livro);
@@ -102,19 +98,16 @@ public class EmprestimoService {
             throw new RequisicaoInvalidaException("Este empréstimo já foi devolvido.");
         }
 
-        // ── Regra 2: ao devolver, marca o livro como disponível novamente ─────
         Livro livro = emprestimo.getLivro();
         livro.setDisponivel(true);
         livroRepository.save(livro);
 
-        // Fecha o empréstimo
         emprestimo.setStatus(Emprestimo.Status.DEVOLVIDO);
         emprestimo.setDataDevolucao(LocalDate.now());
 
         return emprestimoRepository.save(emprestimo);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private Usuario buscarUsuario(Long id) {
         return usuarioRepository.findById(id)
